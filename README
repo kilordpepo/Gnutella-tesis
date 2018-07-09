@@ -1,0 +1,14 @@
+This is simple gnutella client.
+
+Programming language: Java!
+
+Steps to build and run application:
+1. git clone https://git.niksula.hut.fi/t-110-5150/group08_2014.git
+2. go to the root directory of application
+3. javac -d bin -sourcepath src -cp lib/commons-lang3-3.3.2.jar;lib/commons-lang3-3.3.2-javadoc.jar src/servant/Servant.java
+4. java -cp bin; lib/commons-lang3-3.3.2.jar; lib/commons-lang3-3.3.2-javadoc.jar servant.Servant
+5. start test
+
+
+
+
