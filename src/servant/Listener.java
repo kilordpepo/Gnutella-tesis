@@ -29,7 +29,7 @@ public class Listener implements Runnable {
 			try {
 				ServerSocket welcomeSocket = Server.mySocket;
 
-				byte[] header = new byte[16];
+				byte[] header = new byte[18];
 				Socket clientSocket = welcomeSocket.accept();
 				System.out.println("New connection accepted" + clientSocket.getInetAddress());
 				this.clientSocket = clientSocket;
@@ -38,7 +38,8 @@ public class Listener implements Runnable {
 				inFromClient.read(header);
 				for (byte b : header)
 					bf.put((byte) b);
-
+				MessageHandler handler =new MessageHandler();
+				handler.handler(header, clientSocket);
 				// clientSocket.close();
 			} catch (IOException e) {
 				System.out.println("Accept failed at " + this.clientSocket.getPort());

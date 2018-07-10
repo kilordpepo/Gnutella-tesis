@@ -19,7 +19,7 @@ public class IncomingMessage extends Message {
 	    	this.ttl = msg[1];
 	    	this.msg_type = msg[2];
 	    	byte[] l = {msg[6], msg[7]};
-	    	this.length = Helper.shortFromBytes(l);
+	    	this.length = 1;
 	        byte[] p = {msg[4], msg[5]};
 	        this.inPort = Helper.shortFromBytes(p);
 	        byte[] addr = {msg[8], msg[9], msg[10], msg[11]};

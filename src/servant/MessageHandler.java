@@ -109,12 +109,12 @@ public class MessageHandler extends Message {
 					clientSocket.close();
 					break;
 				case 0x03:
-					if ((header[7]==(byte) 0x00 &&
-				       (header[8]==(byte) 0x00))){
+					if ((header[6]==(byte) 0x00 &&
+				       (header[7]==(byte) 0x00))){
 						
 						System.out.println("Join request reveived");
 						IncomingMessage msg = new IncomingMessage(header);   
-						reply(new JoinMessage("accept", msg.id), clientSocket);
+						reply(msg, clientSocket);
 					}
 					
 					System.out.println("Join responce received");

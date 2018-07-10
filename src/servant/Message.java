@@ -50,6 +50,9 @@ public class Message {
    	    head[3] = RESERVED;
    	    head[4] = (byte)(PORT & 0xff);
 	   	head[5] = (byte)((PORT >> 8) & 0xff);
+	   	if(length!=0)
+	   	head[6] =1;
+	   	else
 	   	head[6] = (byte)(length & 0xff);
 	   	head[7] = (byte)((length >> 8) & 0xff);	
 	   	head[8] =  getIpBytes()[0];
