@@ -133,7 +133,8 @@ public class MessageHandler extends Message {
 					break;
 				case (byte) 0x80:
 				     System.out.println("Query received");
-				     IncomingMessage msg = new IncomingMessage(header);   
+				     IncomingMessage msg = new IncomingMessage(header);  
+				     if(queries.size()>0) {
 				     for (IncomingMessage m : queries)
 				    	 if (m.id == msg.id){
 				    		 System.out.println("Query already exists. Discard");
@@ -145,7 +146,7 @@ public class MessageHandler extends Message {
 				    		 //List<Resourse> res = new ArrayList<Resourse>();
 				    		 for (Entry<Key, Collection<Resourse>> k : keys.asMap().entrySet())
 				    		 {
-				    			 if(k.getKey().getK() == msg.body){
+				    			 if(k.getKey().getK()[0] == msg.body[0]){
 				    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
 				    		         
 				    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
@@ -156,6 +157,23 @@ public class MessageHandler extends Message {
 				    		 
 				    		 queries.add(msg);
 				    	 }
+				     }
+				     else {
+				    	 //List<Resourse> res = new ArrayList<Resourse>();
+			    		 for (Entry<Key, Collection<Resourse>> k : keys.asMap().entrySet())
+			    		 {
+			    			 if(k.getKey().getK()[0] == msg.body[0]){
+			    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
+			    		         
+			    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
+			    			 }
+			    			 
+			    			 
+			    		 }
+			    		 
+			    		 queries.add(msg);
+				    	 
+				     }
 				     if (msg.ttl > 1)
 				     {
 				    	 for (Socket s : clients)

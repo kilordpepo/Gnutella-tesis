@@ -56,8 +56,8 @@ public class QueryHitMessage extends Message {
 		 byte[] value = new byte[4];
 		 
 		 
-		   value = Helper.intToBytes(Iterables.get(res, i).getValue());
-		   id = Helper.shortToBytes(Iterables.get(res, i).getId());
+		   value = Helper.intToBytes(Iterables.get(res, i-1).getValue());
+		   id = Helper.shortToBytes(Iterables.get(res, i-1).getId());
 		 
 			 body[j] = id[0];
 			 body[j+1] = id[1];

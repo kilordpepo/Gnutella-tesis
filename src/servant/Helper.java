@@ -117,7 +117,7 @@ public class Helper {
 	                InetAddress addr = addresses.nextElement();
 	                ip = addr.getHostAddress();
 	                ips.add(ip);
-	                System.out.println(iface.getDisplayName() + " " + ip);
+	                //System.out.println(iface.getDisplayName() + " " + ip);
 	                
 	            }
 	        }
