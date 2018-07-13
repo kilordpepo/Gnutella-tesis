@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.Entidades.Nodo;
+import com.Entidades.NodoRF;
+import com.Utils.SistemaUtil;
 import com.google.common.collect.*;
 
 /**
@@ -123,6 +126,8 @@ public class MessageHandler extends Message {
 						System.out.println("Accepted");
 						clients.add(clientSocket);
 						Servant.isConnected = true;
+						NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
+						SistemaUtil.reportarTiempo("addnode", "final", mynodorf);
 					}
 					else 
 					{
@@ -133,6 +138,9 @@ public class MessageHandler extends Message {
 					break;
 				case (byte) 0x80:
 				     System.out.println("Query received");
+
+                     NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
+		             SistemaUtil.reportarTiempo("addnode", "final", mynodorf);
 				     IncomingMessage msg = new IncomingMessage(header);  
 				     if(queries.size()>0) {
 				     for (IncomingMessage m : queries)

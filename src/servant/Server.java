@@ -3,8 +3,13 @@ package servant;
 
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.SocketException;
+
+import com.Entidades.Nodo;
+import com.Entidades.NodoRF;
+import com.Utils.SistemaUtil;
 
 
 
@@ -61,6 +66,10 @@ public class Server {
 			 * @param tcpHostPort the tcp server port
 			 */
 			private void TCPHostThread(int servantPort) throws Exception {			
+				String address = InetAddress.getLocalHost().getHostAddress();
+				int port = servantPort;
+				Nodo.obtenerInstancia().setPuertopeticion(port);
+				Nodo.obtenerInstancia().setDireccion(address);
 				
 				System.out.println("Starting server at port " + servantPort);
 	

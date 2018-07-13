@@ -5,11 +5,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
-
-
-
-
+import com.Entidades.Nodo;
+import com.Entidades.NodoRF;
+import com.Utils.SistemaUtil;
 
 
 public class Servant {
@@ -27,12 +27,13 @@ public class Servant {
 		// TODO Auto-generated method stub
 		
 	
-		System.out.println("Wellcome to group8tellla!\n");
+		System.out.println("Bienvenido a Gnutella!\n");
 		System.out.println("Please indicate your port:");
-		
-		
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		PORT = Integer.parseInt(input.readLine().split("\\s+")[0]);
+		System.out.println("Please indicate the server time address:");
+		input = new BufferedReader(new InputStreamReader(System.in));
+		SistemaUtil.servidorTiempo = input.readLine().split("\\s+")[0];
 		printMenu();
 		while (true) {
 			
@@ -62,12 +63,7 @@ public class Servant {
 			}
 			
 		}
-		
-		 
-		 
-		
-	
-		
+
 	}
 
 	
@@ -89,20 +85,12 @@ public class Servant {
 	}
 
 
-
-
-
-
-
-
-
-
-
 	private static void option(String opt)
 	{
 		switch (opt){
 		    case "1": if (!isNodeOn){
 		    	      System.out.println("Starting Node");
+		    	      
 			          Server.start();
 			          isNodeOn = true;
 			          //Thread worker = new Thread(new PingWorker());
@@ -184,14 +172,18 @@ public class Servant {
 		  				// trim() deletes leading and trailing whitespace
 		  				ip = input.readLine().trim();
 		  	            port = Integer.parseInt(input.readLine().trim());
-		  				
+		  	            NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
+						SistemaUtil.reportarTiempo("addnode", "inicio", mynodorf);
 		  				System.out.println(ip + ":" + port);
 		  				handler.reply(new JoinMessage(), new Socket(ip, port));
 		  				  break;
 		  				} catch (IOException e) {
 		  					System.out.println("Something went wrong, try again");
 		  				    break;
-		  				}
+		  				} catch (NoSuchAlgorithmException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		    			}
 		    			}
 		    			else System.out.println("Start Node First");
@@ -220,6 +212,15 @@ public class Servant {
 		    	 				continue;
 		    	 			}
 		    	 			 System.out.println("Sending query...");
+		    	 			 NodoRF mynodorf;
+								try {
+									mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
+									 SistemaUtil.reportarTiempo("search", "inicio", mynodorf);
+								} catch (NoSuchAlgorithmException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+		    			    
 					         handler.reply(new QueryMessage(key));
 		    	         }
 		    	         
