@@ -41,6 +41,7 @@ public class MessageHandler extends Message {
 	public void handler(byte[] header, Socket clientSocket) throws Exception{
 		
 		//answer output for testing
+		System.out.println("Receiving:");
 		for (byte b : header)
 		{
 			System.out.print(b + " ");
@@ -59,7 +60,7 @@ public class MessageHandler extends Message {
 						System.out.println("Ping A received");
 						IncomingMessage ping = new IncomingMessage(header);
 						System.out.println("Sending Pong A....");
-						reply(new PongAMessage(ping.id, ping.ttl), clientSocket);
+						reply(new PongAMessage(ping.id, ping.ttl), clientSocket,false);
 					}
 					else{
 						System.out.println("Ping B received");
@@ -68,7 +69,7 @@ public class MessageHandler extends Message {
 								System.out.print(b + " ");
 						System.out.println();
 						System.out.println("Sending Pong B....");
-						reply(new PongBMessage(ping.id, ping.ttl, clients, clientSocket), clientSocket);
+						reply(new PongBMessage(ping.id, ping.ttl, clients, clientSocket), clientSocket,false);
 					}
 					break;		
 				case 0x01:
@@ -97,7 +98,7 @@ public class MessageHandler extends Message {
 						for ( Map.Entry<String, Short> entry : list.entrySet())
 						{
 							    System.out.println("Connecting to " + entry.getKey() + ":" + entry.getValue());
-							    reply(new JoinMessage(), new Socket(entry.getKey(),entry.getValue()));
+							    reply(new JoinMessage(), new Socket(entry.getKey(),entry.getValue()),false);
 						}
 						 	}
 						 catch(Exception ex)
@@ -117,7 +118,7 @@ public class MessageHandler extends Message {
 						
 						System.out.println("Join request reveived");
 						IncomingMessage msg = new IncomingMessage(header);   
-						reply(msg, clientSocket);
+						reply(msg, clientSocket,true);
 					}
 					
 					System.out.println("Join responce received");
@@ -157,7 +158,7 @@ public class MessageHandler extends Message {
 				    			 if(k.getKey().getK()[0] == msg.body[0]){
 				    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
 				    		         
-				    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
+				    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket,true);
 				    			 }
 				    			 
 				    			 
@@ -173,7 +174,7 @@ public class MessageHandler extends Message {
 			    			 if(k.getKey().getK()[0] == msg.body[0]){
 			    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
 			    		         
-			    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
+			    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket,true);
 			    			 }
 			    			 
 			    			 
@@ -187,7 +188,7 @@ public class MessageHandler extends Message {
 				    	 for (Socket s : clients)
 				    	 {
 				    		 if (s != clientSocket)
-				    		 reply(msg, s);
+				    		 reply(msg, s,false);
 				    	 }
 				    	// msg.forward(clients);
 				     }
@@ -204,13 +205,13 @@ public class MessageHandler extends Message {
 				    		 for(Socket s: clients){
 				    			 
 				    		     if((s.getInetAddress().toString() == Helper.longToIp(q.getIp()))
-				    		    		 && (s.getPort() == q.PORT)) reply(hit, s);
+				    		    		 && (s.getPort() == q.PORT)) reply(hit, s,false);
 				    		     
 				    		    	 
 				    		     
 				    		 }
 				    		 
-				    		 reply(hit, new Socket(Helper.longToIp(hit.getIp()),hit.PORT));
+				    		 reply(hit, new Socket(Helper.longToIp(hit.getIp()),hit.PORT),false);
 				     }
 				    	 
 				    	 }
@@ -230,7 +231,7 @@ public class MessageHandler extends Message {
 	 * @param client
 	 */
 	
-	public void reply(Message msg, Socket client)
+	public void reply(Message msg, Socket client, boolean noAnswer)
 	{
           
 		try {
@@ -246,10 +247,11 @@ public class MessageHandler extends Message {
             System.out.println();
             
           outToServer.write(msg.message());
-     
+          if(!noAnswer) {
           byte[] answer = new byte[60];
 	      input.read(answer);
 	      handler(answer, client);
+          }
          
 	     
 			System.out.println();
