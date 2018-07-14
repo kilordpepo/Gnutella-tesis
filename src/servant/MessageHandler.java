@@ -23,20 +23,41 @@ import com.google.common.collect.*;
  * 
  */
 
-public class MessageHandler extends Message {
+public class MessageHandler extends Message implements Runnable{
 	
 	
 	public static List<Socket> clients = new ArrayList<Socket>();
 	List<IncomingMessage> queries = new ArrayList<IncomingMessage>();
 	static Multimap<Key, Resourse> keys = ArrayListMultimap.create();
-
+	public Socket clientSocket;
+	public byte[] header;
 	
 	 
 	
 	
+	public MessageHandler(byte[] header, Socket clientSocket) {
+		this.clientSocket=clientSocket;
+		this.header=header;
+	}
+
+	public MessageHandler() {
+	}
+
 	public List<Socket> getClients() {
 		return clients;
 	}
+	
+	@Override
+	public void run() {
+		try {
+			this.handler(header,clientSocket);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 
 	public void handler(byte[] header, Socket clientSocket) throws Exception{
 		
@@ -60,7 +81,7 @@ public class MessageHandler extends Message {
 						System.out.println("Ping A received");
 						IncomingMessage ping = new IncomingMessage(header);
 						System.out.println("Sending Pong A....");
-						reply(new PongAMessage(ping.id, ping.ttl), clientSocket,false);
+						reply(new PongAMessage(ping.id, ping.ttl), clientSocket);
 					}
 					else{
 						System.out.println("Ping B received");
@@ -69,7 +90,7 @@ public class MessageHandler extends Message {
 								System.out.print(b + " ");
 						System.out.println();
 						System.out.println("Sending Pong B....");
-						reply(new PongBMessage(ping.id, ping.ttl, clients, clientSocket), clientSocket,false);
+						reply(new PongBMessage(ping.id, ping.ttl, clients, clientSocket), clientSocket);
 					}
 					break;		
 				case 0x01:
@@ -98,7 +119,7 @@ public class MessageHandler extends Message {
 						for ( Map.Entry<String, Short> entry : list.entrySet())
 						{
 							    System.out.println("Connecting to " + entry.getKey() + ":" + entry.getValue());
-							    reply(new JoinMessage(), new Socket(entry.getKey(),entry.getValue()),false);
+							    reply(new JoinMessage(), new Socket(entry.getKey(),entry.getValue()));
 						}
 						 	}
 						 catch(Exception ex)
@@ -118,12 +139,12 @@ public class MessageHandler extends Message {
 						
 						System.out.println("Join request received");
 						IncomingMessage msg = new IncomingMessage(header);   
-						reply(msg, clientSocket,true);
+						reply(msg, clientSocket);
 					}
-					
-					System.out.println("Join responce received");
+					else
 					if (header[17] == (byte)0x200)
 					{
+						System.out.println("Join responce received");
 						System.out.println("Accepted");
 						clients.add(clientSocket);
 						Servant.isConnected = true;
@@ -158,7 +179,7 @@ public class MessageHandler extends Message {
 				    			 if(k.getKey().getK()[0] == msg.body[0]){
 				    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
 				    		         
-				    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket,true);
+				    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
 				    			 }
 				    			 
 				    			 
@@ -174,7 +195,7 @@ public class MessageHandler extends Message {
 			    			 if(k.getKey().getK()[0] == msg.body[0]){
 			    				 System.out.println("Key: " + k.getKey().getKey() + " matched");
 			    		         
-			    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket,true);
+			    		          reply(new QueryHitMessage(msg.id, k.getValue()), clientSocket);
 			    			 }
 			    			 
 			    			 
@@ -188,7 +209,7 @@ public class MessageHandler extends Message {
 				    	 for (Socket s : clients)
 				    	 {
 				    		 if (s != clientSocket)
-				    		 reply(msg, s,false);
+				    		 reply(msg, s);
 				    	 }
 				    	// msg.forward(clients);
 				     }
@@ -205,13 +226,13 @@ public class MessageHandler extends Message {
 				    		 for(Socket s: clients){
 				    			 
 				    		     if((s.getInetAddress().toString() == Helper.longToIp(q.getIp()))
-				    		    		 && (s.getPort() == q.PORT)) reply(hit, s,false);
+				    		    		 && (s.getPort() == q.PORT)) reply(hit, s);
 				    		     
 				    		    	 
 				    		     
 				    		 }
 				    		 
-				    		 reply(hit, new Socket(Helper.longToIp(hit.getIp()),hit.PORT),false);
+				    		 reply(hit, new Socket(Helper.longToIp(hit.getIp()),hit.PORT));
 				     }
 				    	 
 				    	 }
@@ -231,7 +252,7 @@ public class MessageHandler extends Message {
 	 * @param client
 	 */
 	
-	public void reply(Message msg, Socket client, boolean noAnswer)
+	public void reply(Message msg, Socket client)
 	{
           
 		try {
@@ -247,11 +268,11 @@ public class MessageHandler extends Message {
             System.out.println();
             
           outToServer.write(msg.message());
-          if(!noAnswer) {
+         
           byte[] answer = new byte[60];
 	      input.read(answer);
 	      handler(answer, client);
-          }
+          
          
 	     
 			System.out.println();
@@ -310,6 +331,7 @@ public class MessageHandler extends Message {
 
 		
 	}
+
 	
 	
 }
