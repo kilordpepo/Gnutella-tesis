@@ -40,8 +40,8 @@ public class Listener implements Runnable {
 				ByteBuffer bf = ByteBuffer.allocate(bufferSize);
 				BufferedInputStream inFromClient = new BufferedInputStream(clientSocket.getInputStream());
 				inFromClient.read(header);
-				for (byte b : header)
-					bf.put((byte) b);
+				/*for (byte b : header)
+					bf.put((byte) b);*/
 				MessageHandler handler =new MessageHandler();
 				handler.handler(header, clientSocket);
 				// clientSocket.close();

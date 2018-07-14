@@ -42,10 +42,10 @@ public class MessageHandler extends Message {
 		
 		//answer output for testing
 		System.out.println("Receiving:");
-		for (byte b : header)
+		/*for (byte b : header)
 		{
 			System.out.print(b + " ");
-		}
+		}*/
 		        System.out.println();
 		
 			//clientSocket.getInputStream();
@@ -116,9 +116,9 @@ public class MessageHandler extends Message {
 					if ((header[6]==(byte) 0x00 &&
 				       (header[7]==(byte) 0x00))){
 						
-						System.out.println("Join request reveived");
+						System.out.println("Join request received");
 						IncomingMessage msg = new IncomingMessage(header);   
-						reply(msg, clientSocket,true);
+						reply(msg, clientSocket,false);
 					}
 					
 					System.out.println("Join responce received");

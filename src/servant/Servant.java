@@ -198,18 +198,12 @@ public class Servant {
 		    case "2": 	if (isNodeOn && isConnected){
 		    	         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		    	         System.out.println("Enter the key:");
-		    	         while (true) {
 		    	        String key = null;
 		 
 		    	 			try {
 		    	 				key = input.readLine(); 
 		    	 			} catch (IOException e) {
 		    	 				System.out.println("Upps, try again");
-		    	 				continue;
-		    	 			}
-		    	 			//if no input, try again
-		    	 			if (key.length() == 0) {
-		    	 				continue;
 		    	 			}
 		    	 			 System.out.println("Sending query...");
 		    	 			 NodoRF mynodorf;
@@ -222,7 +216,7 @@ public class Servant {
 								}
 		    			    
 					         handler.reply(new QueryMessage(key));
-		    	         }
+		    	         
 		    	         
     					}
     					else System.out.println("Connect first");
