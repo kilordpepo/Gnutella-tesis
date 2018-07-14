@@ -31,9 +31,10 @@ public class Servant {
 		System.out.println("Please indicate your port:");
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		PORT = Integer.parseInt(input.readLine().split("\\s+")[0]);
-		System.out.println("Please indicate the server time address:");
-		input = new BufferedReader(new InputStreamReader(System.in));
-		SistemaUtil.servidorTiempo = input.readLine().split("\\s+")[0];
+		//System.out.println("Please indicate the server time address:");
+		//input = new BufferedReader(new InputStreamReader(System.in));
+	    //input.readLine().split("\\s+")[0];
+		SistemaUtil.servidorTiempo = "localhost";
 		printMenu();
 		while (true) {
 			
@@ -170,8 +171,9 @@ public class Servant {
 		              int port;
 		              try {
 		  				// trim() deletes leading and trailing whitespace
-		  				ip = input.readLine().trim();
-		  	            port = Integer.parseInt(input.readLine().trim());
+		            	String [] address =input.readLine().split("\\s+");   
+		  				ip = address[0];
+		  	            port = Integer.parseInt(address[1]);
 		  	            NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
 						SistemaUtil.reportarTiempo("addnode", "inicio", mynodorf);
 		  				System.out.println(ip + ":" + port);
