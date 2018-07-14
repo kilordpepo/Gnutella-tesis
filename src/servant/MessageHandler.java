@@ -141,7 +141,7 @@ public class MessageHandler extends Message {
 				     System.out.println("Query received");
 
                      NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
-		             SistemaUtil.reportarTiempo("addnode", "final", mynodorf);
+		             SistemaUtil.reportarTiempo("search", "final", mynodorf);
 				     IncomingMessage msg = new IncomingMessage(header);  
 				     if(queries.size()>0) {
 				     for (IncomingMessage m : queries)
