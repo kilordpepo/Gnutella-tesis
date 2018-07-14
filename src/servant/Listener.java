@@ -40,10 +40,11 @@ public class Listener implements Runnable {
 				ByteBuffer bf = ByteBuffer.allocate(bufferSize);
 				BufferedInputStream inFromClient = new BufferedInputStream(clientSocket.getInputStream());
 				inFromClient.read(header);
-				/*for (byte b : header)
-					bf.put((byte) b);*/
-				MessageHandler handler =new MessageHandler();
-				handler.handler(header, clientSocket);
+				for (byte b : header)
+					bf.put((byte) b);
+				MessageHandler handler =new MessageHandler(header,clientSocket);
+				Thread t = new Thread(handler);
+				t.start();
 				// clientSocket.close();
 			} catch (IOException e) {
 				System.out.println("Accept failed at " + this.clientSocket.getPort());

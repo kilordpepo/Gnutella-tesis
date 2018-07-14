@@ -154,7 +154,7 @@ public class Servant {
 		    case "6": if (isNodeOn){
 		    	      System.out.println("Entering the network...");
 					  try {
-					  handler.reply(new JoinMessage(), new Socket("169.254.94.215", 8602),false);
+					  handler.reply(new JoinMessage(), new Socket("169.254.94.215", 8602));
 					  
 					   } catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -177,7 +177,7 @@ public class Servant {
 		  	            NodoRF mynodorf = new NodoRF(Nodo.obtenerInstancia().getDireccion(),Nodo.getInstancia().getPuertopeticion());
 						SistemaUtil.reportarTiempo("addnode", "inicio", mynodorf);
 		  				System.out.println(ip + ":" + port);
-		  				handler.reply(new JoinMessage(), new Socket(ip, port),false);
+		  				handler.reply(new JoinMessage(), new Socket(ip, port));
 		  				  break;
 		  				} catch (IOException e) {
 		  					System.out.println("Something went wrong, try again");
