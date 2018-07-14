@@ -118,7 +118,7 @@ public class MessageHandler extends Message {
 						
 						System.out.println("Join request received");
 						IncomingMessage msg = new IncomingMessage(header);   
-						reply(msg, clientSocket,false);
+						reply(msg, clientSocket,true);
 					}
 					
 					System.out.println("Join responce received");
